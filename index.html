@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>face detect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="wrap">
+        <h2>FaceDetector</h2>
+        <img src="PLEASE FaceImage">
+        <canvas></canvas>
+    </div>
+
+    <script>
+window.onload = () => {
+    const faceDetector = new window.FaceDetector();
+    const img = document.querySelector('img');
+    let canvas = document.querySelector('canvas');
+    let ctx = canvas.getContext('2d');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    ctx.lineWidth = 3;
+    faceDetector.detect(img).then((faces) => drawFaces(faces));
+    function drawFaces(faces) {
+    faces.forEach((face) => {
+        console.log(face);
+        face.landmarks.forEach(landmark => {
+            ctx.beginPath();
+            ctx.strokeStyle = '#00ffff';
+            ctx.arc(landmark.location.x, landmark.location.y, 5, 0, 2 * Math.PI);
+            ctx.stroke();
+        })
+        ctx.beginPath();
+        ctx.strokeStyle = '#00ff00';
+        ctx.rect(face.boundingBox.x, face.boundingBox.y, face.boundingBox.width, face.boundingBox.height);
+        ctx.stroke();
+    })
+}
+}
+    </script>
+</body>
+</html>
